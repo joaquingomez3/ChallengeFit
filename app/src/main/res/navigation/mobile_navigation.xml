@@ -3,23 +3,69 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/navigation_home">
+    app:startDestination="@+id/navigation_login">
 
     <fragment
-        android:id="@+id/navigation_home"
-        android:name="com.example.challengefit.ui.home.HomeFragment"
-        android:label="@string/title_home"
-        tools:layout="@layout/fragment_home" />
+        android:id="@+id/navigation_login"
+        android:name="com.example.challengefit.ui.login.LoginFragment"
+        android:label="Login"
+        tools:layout="@layout/fragment_login" />
 
     <fragment
-        android:id="@+id/navigation_dashboard"
-        android:name="com.example.challengefit.ui.dashboard.DashboardFragment"
-        android:label="@string/title_dashboard"
-        tools:layout="@layout/fragment_dashboard" />
+        android:id="@+id/navigation_home_student"
+        android:name="com.example.challengefit.ui.student.RutinasAlumnoFragment"
+        android:label="Mis Rutinas" />
+
+    <fragment
+        android:id="@+id/navigation_challenges_student"
+        android:name="com.example.challengefit.ui.student.DesafiosAlumnoFragment"
+        android:label="Desafíos" />
+
+    <fragment
+        android:id="@+id/navigation_progress_student"
+        android:name="com.example.challengefit.ui.student.ProgresoFragment"
+        android:label="Progreso" />
+
+    <fragment
+        android:id="@+id/navigation_routines_trainer"
+        android:name="com.example.challengefit.ui.trainer.RutinasEntrenadorFragment"
+        android:label="Rutinas Creadas" />
+
+    <fragment
+        android:id="@+id/navigation_students_trainer"
+        android:name="com.example.challengefit.ui.trainer.AlumnosFragment"
+        android:label="Alumnos" />
+
+    <fragment
+        android:id="@+id/navigation_challenges_trainer"
+        android:name="com.example.challengefit.ui.trainer.DesafiosEntrenadorFragment"
+        android:label="Desafíos" />
 
     <fragment
         android:id="@+id/navigation_notifications"
         android:name="com.example.challengefit.ui.notifications.NotificationsFragment"
-        android:label="@string/title_notifications"
-        tools:layout="@layout/fragment_notifications" />
+        android:label="Notificaciones" />
+
+    <fragment
+        android:id="@+id/navigation_detalle_rutina"
+        android:name="com.example.challengefit.ui.trainer.DetalleRutinaFragment"
+        android:label="Detalle de Rutina">
+        <argument
+            android:name="rutinaId"
+            app:argType="integer" />
+    </fragment>
+
+    <!-- DESTINOS PARA CREACIÓN -->
+    <fragment
+        android:id="@+id/navigation_new_routine"
+        android:name="com.example.challengefit.ui.trainer.NuevaRutinaFragment"
+        android:label="Nueva Rutina"
+        tools:layout="@layout/fragment_nueva_rutina" />
+
+    <fragment
+        android:id="@+id/navigation_new_challenge"
+        android:name="com.example.challengefit.ui.trainer.NuevoDesafioFragment"
+        android:label="Nuevo Desafío"
+        tools:layout="@layout/fragment_nuevo_desafio" />
+
 </navigation>

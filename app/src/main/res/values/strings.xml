@@ -3,4 +3,25 @@
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
+
+    <!-- Navigation Titles -->
+    <string name="title_routines">Rutinas</string>
+    <string name="title_students">Alumnos</string>
+    <string name="title_challenges">Desafíos</string>
+    <string name="title_progress">Progreso</string>
+    <string name="title_exit">Salir</string>
+
+    <!-- Trainer specific -->
+    <string name="title_my_routines">Mis Rutinas</string>
+    <string name="title_my_students">Mis Alumnos</string>
+    <string name="title_my_challenges">Mis Desafíos</string>
+    <string name="btn_new_routine">+ Nueva Rutina</string>
+    <string name="btn_new_challenge">+ Nuevo Desafío</string>
+
+    <!-- Student specific -->
+    <string name="welcome_student">¡Hola, Alumno!</string>
+    <string name="active_challenges">Mis Desafíos Activos</string>
+    <string name="weekly_progress">Mi Progreso Semanal</string>
+    <string name="general_progress">Progreso General</string>
+    <string name="performance">Rendimiento</string>
 </resources>

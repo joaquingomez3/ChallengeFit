@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_dark"
+    android:padding="16dp"
+    tools:context=".ui.trainer.DesafiosEntrenadorFragment">
+
+    <!-- Header: Icono Copa + Mis Desafíos + Lupa -->
+    <ImageView
+        android:id="@+id/ivIconoDesafios"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
+        android:src="@drawable/ic_challenges"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="#4D5D53" />
+
+    <TextView
+        android:id="@+id/tvTituloDesafios"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:text="Mis Desafíos"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@id/ivIconoDesafios"
+        app:layout_constraintStart_toEndOf="@id/ivIconoDesafios"
+        app:layout_constraintTop_toTopOf="@id/ivIconoDesafios" />
+
+<!--    <ImageView-->
+<!--        android:id="@+id/ivSearchDesafios"-->
+<!--        android:layout_width="24dp"-->
+<!--        android:layout_height="24dp"-->
+<!--        android:src="@android:drawable/ic_menu_search"-->
+<!--        app:layout_constraintBottom_toBottomOf="@id/tvTituloDesafios"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="@id/tvTituloDesafios"-->
+<!--        app:tint="#4D5D53" />-->
+
+    <!-- RecyclerView para los Desafíos -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvDesafiosEntrenador"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvTituloDesafios"
+        tools:listitem="@layout/item_challenge" />
+
+    <!-- Botón Nuevo Desafío -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnNuevoDesafio"
+        android:layout_width="wrap_content"
+        android:layout_height="60dp"
+        android:layout_marginBottom="24dp"
+        android:backgroundTint="#00FF40"
+        android:text="+ Nuevo Desafío"
+        android:textAllCaps="false"
+        android:textColor="#000000"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:cornerRadius="30dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -7,4 +7,27 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <!-- App Theme Colors -->
+    <color name="background_dark">#0F1F2F</color>
+    <color name="card_dark">#1A2A3A</color>
+    <color name="accent_green">#81F047</color>
+    <color name="text_primary">#FFFFFF</color>
+    <color name="text_secondary">#C5D3E3</color>
+    <color name="text_hint">#7A8E9E</color>
+    <color name="progress_empty">#2D3D4D</color>
+    <color name="bg_black">#0A0A0A</color>
+    <color name="fitness_green">#1DB954</color>
+    <color name="text_white">#FFFFFF</color>
+    <color name="text_gray">#B3B3B3</color>
+
+    <!-- Student Dashboard Colors -->
+    <color name="dark_background">#0F1F2F</color>
+    <color name="darker_background">#0A0A0A</color>
+    <color name="card_background">#1A2A3A</color>
+    <color name="primary_green">#81F047</color>
+
+    <color name="progress_background">#2D3D4D</color>
+    <color name="nav_item_color">#C5D3E3</color>
+
 </resources>

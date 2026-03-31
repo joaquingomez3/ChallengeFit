@@ -4,15 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/dark_background">
+    android:background="@color/dark_background"
+    android:padding="16dp"
+    tools:context=".ui.student.DesafiosAlumnoFragment">
 
     <TextView
-        android:id="@+id/tvNotifHeader"
+        android:id="@+id/tvTituloDesafiosAlumno"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="24dp"
-        android:text="Notificaciones"
+        android:text="Mis Desafíos"
         android:textColor="@color/white"
         android:textSize="24sp"
         android:textStyle="bold"
@@ -20,26 +20,14 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvNotifications"
+        android:id="@+id/rvDesafiosAlumno"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvNotifHeader"
-        tools:listitem="@layout/item_notification" />
-
-    <TextView
-        android:id="@+id/tvEmptyNotif"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="No tienes notificaciones nuevas"
-        android:textColor="@color/text_hint"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/tvTituloDesafiosAlumno"
+        tools:listitem="@layout/item_challenge" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

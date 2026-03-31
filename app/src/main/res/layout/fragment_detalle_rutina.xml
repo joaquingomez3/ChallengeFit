@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/dark_background"
+    android:padding="16dp">
+
+    <ImageView
+        android:id="@+id/btnBackDetalle"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:padding="4dp"
+        android:src="@android:drawable/ic_menu_revert"
+        app:layout_constraintBottom_toBottomOf="@id/tvDetalleNombre"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/tvDetalleNombre"
+        app:tint="@color/white" />
+
+    <TextView
+        android:id="@+id/tvDetalleNombre"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="Nombre de la Rutina"
+        android:textColor="@color/white"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/btnBackDetalle"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvDetalleNivel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/rounded_input_background"
+        android:paddingHorizontal="12dp"
+        android:paddingVertical="4dp"
+        android:text="Nivel"
+        android:textColor="@color/accent_green"
+        app:layout_constraintStart_toStartOf="@id/tvDetalleNombre"
+        app:layout_constraintTop_toBottomOf="@id/tvDetalleNombre" />
+
+    <TextView
+        android:id="@+id/tvDetalleDuracion"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:text="60 min"
+        android:textColor="@color/text_secondary"
+        app:layout_constraintBottom_toBottomOf="@id/tvDetalleNivel"
+        app:layout_constraintStart_toEndOf="@id/tvDetalleNivel"
+        app:layout_constraintTop_toTopOf="@id/tvDetalleNivel" />
+
+    <TextView
+        android:id="@+id/tvDetalleDescripcion"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Descripción de la rutina..."
+        android:textColor="@color/text_secondary"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/btnBackDetalle"
+        app:layout_constraintTop_toBottomOf="@id/tvDetalleNivel" />
+
+    <View
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="24dp"
+        android:background="#1AFFFFFF"
+        app:layout_constraintTop_toBottomOf="@id/tvDetalleDescripcion" />
+
+    <TextView
+        android:id="@+id/tvTituloEjercicios"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="Ejercicios"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@id/btnBackDetalle"
+        app:layout_constraintTop_toBottomOf="@id/divider" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvEjerciciosRutina"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="12dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvTituloEjercicios"
+        tools:listitem="@android:layout/simple_list_item_1" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
