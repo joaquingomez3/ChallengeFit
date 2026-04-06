@@ -1,42 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background_dark"> <com.google.android.material.appbar.AppBarLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
     android:background="@color/background_dark">
-
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize">
-
-        <ImageButton
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:src="@drawable/ic_arrow_back"
-            app:tint="@android:color/white" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="Nueva Rutina"
-            android:textColor="@android:color/white"
-            android:textSize="18sp"
-            android:textStyle="bold" />
-    </androidx.appcompat.widget.Toolbar>
-</com.google.android.material.appbar.AppBarLayout>
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        app:layout_constraintBottom_toTopOf="@id/btnGuardarRutina"
+        app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -47,130 +22,100 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Nombre de la Rutina"
-                android:textColor="@android:color/white"
-                android:textSize="14sp"
-                android:layout_marginBottom="8dp"/>
+                android:text="Nueva Rutina"
+                android:textColor="@color/white"
+                android:textSize="24sp"
+                android:textStyle="bold" />
 
             <EditText
                 android:id="@+id/etRoutineName"
                 android:layout_width="match_parent"
-                android:layout_height="56dp"
-                android:background="@drawable/bg_input_dark"
-                android:hint="Ej: Día de Pecho y Tríceps"
-                android:paddingHorizontal="16dp"
-                android:textColor="@android:color/white"
-                android:textColorHint="#66FFFFFF" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Descripción"
-                android:textColor="@android:color/white"
-                android:textSize="14sp"
+                android:layout_height="50dp"
                 android:layout_marginTop="16dp"
-                android:layout_marginBottom="8dp"/>
+                android:background="@drawable/rounded_input_background"
+                android:hint="Nombre de la rutina"
+                android:paddingHorizontal="16dp"
+                android:textColor="@color/white"
+                android:textColorHint="@color/text_hint" />
 
             <EditText
                 android:id="@+id/etDescription"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:minHeight="100dp"
-                android:background="@drawable/bg_input_dark"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/rounded_input_background"
                 android:gravity="top"
-                android:hint="Añade una descripción corta..."
+                android:hint="Descripción"
+                android:minLines="3"
                 android:padding="16dp"
-                android:textColor="@android:color/white"
-                android:textColorHint="#66FFFFFF" />
+                android:textColor="@color/white"
+                android:textColorHint="@color/text_hint" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Ejercicios"
-                android:textColor="@android:color/white"
-                android:textSize="16sp"
-                android:textStyle="bold"
                 android:layout_marginTop="24dp"
-                android:layout_marginBottom="12dp"/>
+                android:text="Ejercicios Seleccionados"
+                android:textColor="@color/accent_green"
+                android:textSize="16sp"
+                android:textStyle="bold" />
 
-            <com.google.android.material.card.MaterialCardView
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvSelectedExercises"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardBackgroundColor="@color/card_dark"
-                app:cardCornerRadius="12dp"
-                app:strokeWidth="0dp"
-                android:layout_marginBottom="12dp">
+                android:layout_marginTop="8dp"
+                android:nestedScrollingEnabled="false"
+                tools:listitem="@layout/item_routine_exercise_input" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="16dp">
-
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Press de Banca"
-                            android:textColor="@android:color/white"
-                            android:textStyle="bold" />
-                        <ImageView
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
-                            android:layout_alignParentEnd="true"
-                            android:src="@drawable/ic_close"
-                            app:tint="#808080" />
-                    </RelativeLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:layout_marginTop="12dp"
-                        android:weightSum="3">
-
-                        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical">
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="SERIES" android:textSize="10sp" android:textColor="#808080" android:textStyle="bold"/>
-                            <EditText android:layout_width="match_parent" android:layout_height="40dp" android:text="4" android:textColor="@android:color/white" android:background="@drawable/bg_outline_input" android:gravity="center" android:inputType="number"/>
-                        </LinearLayout>
-
-                        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical" android:layout_marginHorizontal="8dp">
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="REPS" android:textSize="10sp" android:textColor="#808080" android:textStyle="bold"/>
-                            <EditText android:layout_width="match_parent" android:layout_height="40dp" android:text="10" android:textColor="@android:color/white" android:background="@drawable/bg_outline_input" android:gravity="center" android:inputType="number"/>
-                        </LinearLayout>
-
-                        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical">
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="DESCANSO" android:textSize="10sp" android:textColor="#808080" android:textStyle="bold"/>
-                            <EditText android:layout_width="match_parent" android:layout_height="40dp" android:text="60s" android:textColor="@android:color/white" android:background="@drawable/bg_outline_input" android:gravity="center"/>
-                        </LinearLayout>
-                    </LinearLayout>
-                </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
-
-            <Button
+            <View
                 android:layout_width="match_parent"
-                android:layout_height="56dp"
-                android:backgroundTint="#00000000"
-                android:text="Selecciona un ejercicio..."
-                android:textAllCaps="false"
-                android:textColor="#808080"
-                app:strokeColor="#33FFFFFF"
-                app:strokeWidth="2dp"
-                android:drawableEnd="@drawable/ic_add"
-                android:layout_marginBottom="100dp" /> </LinearLayout>
+                android:layout_height="1dp"
+                android:layout_marginTop="16dp"
+                android:background="#33FFFFFF" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Buscar Ejercicio"
+                android:textColor="@color/white"
+                android:textSize="14sp" />
+
+            <EditText
+                android:id="@+id/etSearchExercise"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/rounded_input_background"
+                android:drawableStart="@android:drawable/ic_menu_search"
+                android:drawablePadding="8dp"
+                android:hint="Escribe para buscar..."
+                android:paddingHorizontal="16dp"
+                android:textColor="@color/white"
+                android:textColorHint="@color/text_hint" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvSearchExerciseResults"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:nestedScrollingEnabled="false"
+                android:paddingBottom="20dp" />
+
+        </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
     <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnGuardarRutina"
         android:layout_width="match_parent"
-        android:layout_height="64dp"
-        android:layout_gravity="bottom"
+        android:layout_height="60dp"
         android:layout_margin="16dp"
-        android:text="Guardar Rutina"
+        android:backgroundTint="@color/accent_green"
+        android:text="GUARDAR RUTINA"
+        android:textColor="@color/bg_black"
         android:textStyle="bold"
-        android:textColor="#102213"
-        app:backgroundTint="#13ec37"
-        app:cornerRadius="32dp" />
+        app:cornerRadius="12dp"
+        app:layout_constraintBottom_toBottomOf="parent" />
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

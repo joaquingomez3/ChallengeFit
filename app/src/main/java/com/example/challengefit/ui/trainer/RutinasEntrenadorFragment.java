@@ -12,14 +12,11 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.challengefit.R;
-import com.example.challengefit.databinding.FragmentRutinasEntrenadorBinding;
-
 import java.util.ArrayList;
 
 public class RutinasEntrenadorFragment extends Fragment {
 
     private RutinasEntrenadorViewModel mViewModel;
-    private FragmentRutinasEntrenadorBinding binding;
     private RecyclerView rvRutinas;
     private RoutineAdapter adapter;
 
@@ -27,16 +24,19 @@ public class RutinasEntrenadorFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_rutinas_entrenador, container, false);
-        binding = FragmentRutinasEntrenadorBinding.inflate(inflater, container, false);
+
         rvRutinas = root.findViewById(R.id.rvRutinasEntrenador);
         rvRutinas.setLayoutManager(new LinearLayoutManager(getContext()));
         
-        // Inicializamos el adaptador con una lista vacía
         adapter = new RoutineAdapter(new ArrayList<>());
         rvRutinas.setAdapter(adapter);
 
-        binding.btnNuevaRutina.setOnClickListener(v ->
+        // CONFIGURACIÓN DEL BOTÓN NUEVA RUTINA
+        View btnNuevaRutina = root.findViewById(R.id.btnNuevaRutina);
+        if (btnNuevaRutina != null) {
+            btnNuevaRutina.setOnClickListener(v ->
                 Navigation.findNavController(v).navigate(R.id.navigation_new_routine));
+        }
 
         return root;
     }
@@ -47,14 +47,12 @@ public class RutinasEntrenadorFragment extends Fragment {
         
         mViewModel = new ViewModelProvider(this).get(RutinasEntrenadorViewModel.class);
 
-        // Observamos los cambios en la lista de rutinas
         mViewModel.getLista().observe(getViewLifecycleOwner(), rutinas -> {
             if (rutinas != null) {
                 adapter.setRutinas(rutinas);
             }
         });
 
-        // Pedimos al ViewModel que cargue las rutinas desde la API
         mViewModel.cargarRutinas();
     }
 }

@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.example.challengefit.modelos.Desafio;
+import com.example.challengefit.modelos.DesafioResponse;
+import com.example.challengefit.modelos.Ejercicio;
 import com.example.challengefit.modelos.Rutina;
 import com.example.challengefit.modelos.Usuario;
 import com.google.gson.Gson;
@@ -84,19 +86,27 @@ public class ApiClient {
         @GET("api/Rutina/{id}")
         Call<Rutina> obtenerRutinaPorId(@Header("Authorization") String token, @Path("id") int id);
 
+        @GET("api/Rutina/buscar-ejercicios")
+        Call<List<Ejercicio>> buscarEjercicios(@Header("Authorization") String token, @Query("nombre") String nombre);
+
+        @POST("api/Rutina")
+        Call<Rutina> crearRutina(@Header("Authorization") String token, @Body Rutina rutina);
+
         // ALUMNOS CON PROGRESO
         @GET("api/Usuario/alumnos/progreso")
         Call<List<Usuario>> obtenerAlumnosConProgreso(@Header("Authorization") String token);
 
-        // DESAFIOS ENTRENADOR
+        // DESAFIOS
         @GET("api/Desafio")
         Call<List<Desafio>> obtenerDesafios(@Header("Authorization") String token);
 
-        // DESAFIOS ALUMNO
         @GET("api/Desafio/mis-desafios")
         Call<List<Desafio>> obtenerMisDesafios(@Header("Authorization") String token);
 
-        // SOLICITUDES (BUSCAR ENTRENADORES)
+        @POST("api/Desafio")
+        Call<DesafioResponse> crearDesafio(@Header("Authorization") String token, @Body Desafio desafio);
+
+        // SOLICITUDES
         @GET("api/Solicitud/buscar-entrenadores")
         Call<List<Usuario>> buscarEntrenadores(@Header("Authorization") String token, @Query("nombre") String nombre);
 
@@ -104,7 +114,6 @@ public class ApiClient {
         Call<String> enviarSolicitud(@Header("Authorization") String token, @Body SolicitudRequest solicitud);
     }
 
-    // Clase auxiliar para el envío de solicitud
     public static class SolicitudRequest {
         public int idEntrenador;
         public SolicitudRequest(int idEntrenador) { this.idEntrenador = idEntrenador; }
