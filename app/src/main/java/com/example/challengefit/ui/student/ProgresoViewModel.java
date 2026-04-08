@@ -16,6 +16,7 @@ import retrofit2.Response;
 
 public class ProgresoViewModel extends AndroidViewModel {
     private MutableLiveData<List<Usuario>> mTrainers = new MutableLiveData<>();
+    private MutableLiveData<String> mStatusMessage = new MutableLiveData<>();
 
     public ProgresoViewModel(@NonNull Application application) {
         super(application);
@@ -23,6 +24,10 @@ public class ProgresoViewModel extends AndroidViewModel {
 
     public LiveData<List<Usuario>> getTrainers() {
         return mTrainers;
+    }
+
+    public LiveData<String> getStatusMessage() {
+        return mStatusMessage;
     }
 
     public void buscarEntrenadores(String nombre) {
@@ -46,21 +51,28 @@ public class ProgresoViewModel extends AndroidViewModel {
 
     public void enviarSolicitud(int idEntrenador) {
         String token = ApiClient.leerToken(getApplication());
-        if (token != null) {
-            ApiClient.getChallengeFitService().enviarSolicitud(token, new ApiClient.SolicitudRequest(idEntrenador))
-                .enqueue(new Callback<String>() {
-                    @Override
-                    public void onResponse(Call<String> call, Response<String> response) {
-                        if (response.isSuccessful()) {
-                            Toast.makeText(getApplication(), "Solicitud enviada con éxito", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<String> call, Throwable t) {
-                        Log.e("ProgresoVM", "Error solicitud: " + t.getMessage());
-                    }
-                });
+        if (token == null) {
+            mStatusMessage.postValue("Inicie sesión nuevamente");
+            return;
         }
+
+        ApiClient.getChallengeFitService().enviarSolicitud(token, new ApiClient.SolicitudRequest(idEntrenador))
+            .enqueue(new Callback<String>() {
+                @Override
+                public void onResponse(Call<String> call, Response<String> response) {
+                    if (response.isSuccessful()) {
+                        mStatusMessage.postValue("Solicitud enviada con éxito");
+                    } else {
+                        Log.e("ProgresoVM", "Error API: " + response.code());
+                        mStatusMessage.postValue("No se pudo enviar: " + response.code());
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<String> call, Throwable t) {
+                    Log.e("ProgresoVM", "Fallo total: " + t.getMessage());
+                    mStatusMessage.postValue("Error de red");
+                }
+            });
     }
 }

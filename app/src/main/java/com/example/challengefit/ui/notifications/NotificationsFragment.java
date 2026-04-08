@@ -4,38 +4,91 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.challengefit.R;
 import com.example.challengefit.modelos.Notificacion;
+import com.example.challengefit.modelos.Solicitud;
+import com.example.challengefit.request.ApiClient;
 import java.util.ArrayList;
 import java.util.List;
 
 public class NotificationsFragment extends Fragment {
 
     private RecyclerView rvNotifications;
-    private NotificationAdapter adapter;
+    private NotificationsViewModel mViewModel;
+    private RequestsAdapter requestsAdapter;
+    private NotificationAdapter generalAdapter;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_notifications, container, false);
-
         rvNotifications = root.findViewById(R.id.rvNotifications);
         rvNotifications.setLayoutManager(new LinearLayoutManager(getContext()));
+        return root;
+    }
 
-        // Datos de prueba
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        mViewModel = new ViewModelProvider(this).get(NotificationsViewModel.class);
+
+        String rol = ApiClient.leerRol(requireContext());
+
+        if ("ENTRENADOR".equals(rol) || "2".equals(rol)) {
+            configurarVistaEntrenador();
+        } else {
+            configurarVistaAlumno();
+        }
+    }
+
+    private void configurarVistaEntrenador() {
+        requestsAdapter = new RequestsAdapter(new ArrayList<>(), new RequestsAdapter.OnRequestActionListener() {
+            @Override
+            public void onAccept(Solicitud solicitud) {
+                mViewModel.aceptarSolicitud(solicitud.getId());
+                Toast.makeText(getContext(), "Aceptando solicitud...", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onReject(Solicitud solicitud) {
+                mViewModel.rechazarSolicitud(solicitud.getId());
+                Toast.makeText(getContext(), "Rechazando solicitud...", Toast.LENGTH_SHORT).show();
+            }
+        });
+        rvNotifications.setAdapter(requestsAdapter);
+
+        mViewModel.getSolicitudes().observe(getViewLifecycleOwner(), solicitudes -> {
+            if (solicitudes != null) {
+                requestsAdapter.setRequests(solicitudes);
+                actualizarEmptyState(solicitudes.isEmpty());
+            }
+        });
+
+        mViewModel.cargarSolicitudes();
+    }
+
+    private void configurarVistaAlumno() {
+        // Por ahora los alumnos ven las notificaciones de prueba que creamos antes
         List<Notificacion> list = new ArrayList<>();
         list.add(new Notificacion("Nueva Rutina", "Tu entrenador ha asignado 'Piernas Pro'.", "Hace 5m"));
         list.add(new Notificacion("Desafío Completado", "¡Felicidades! Completaste el reto de 30 días.", "Hace 1h"));
-        list.add(new Notificacion("Recordatorio", "No olvides registrar tu progreso de hoy.", "Hace 3h"));
+        
+        generalAdapter = new NotificationAdapter(list);
+        rvNotifications.setAdapter(generalAdapter);
+        actualizarEmptyState(list.isEmpty());
+    }
 
-        adapter = new NotificationAdapter(list);
-        rvNotifications.setAdapter(adapter);
-
-        return root;
+    private void actualizarEmptyState(boolean isEmpty) {
+        View emptyText = getView().findViewById(R.id.tvEmptyNotif);
+        if (emptyText != null) {
+            emptyText.setVisibility(isEmpty ? View.VISIBLE : View.GONE);
+        }
     }
 }

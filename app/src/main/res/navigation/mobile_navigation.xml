@@ -12,6 +12,12 @@
         tools:layout="@layout/fragment_login" />
 
     <fragment
+        android:id="@+id/navigation_registro"
+        android:name="com.example.challengefit.ui.login.RegistroFragment"
+        android:label="Registro"
+        tools:layout="@layout/fragment_registro" />
+
+    <fragment
         android:id="@+id/navigation_home_student"
         android:name="com.example.challengefit.ui.student.RutinasAlumnoFragment"
         android:label="Mis Rutinas" />

@@ -8,6 +8,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,6 +30,14 @@ public class LoginFragment extends Fragment {
         mViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
         binding = FragmentLoginBinding.inflate(inflater, container, false);
         View Root = binding.getRoot();
+
+        // NAVEGACIÓN AL REGISTRO
+        binding.linkRegister.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Navigation.findNavController(v).navigate(R.id.navigation_registro);
+            }
+        });
 
         binding.buttonLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -57,7 +66,6 @@ public class LoginFragment extends Fragment {
             public void onChanged(Boolean aBoolean) {
                 if (aBoolean != null && aBoolean) {
                     String rol = ApiClient.leerRol(requireContext());
-                    // Usamos post para asegurar que la navegación ocurra en el siguiente ciclo del main thread
                     binding.getRoot().post(() -> {
                         if (getActivity() instanceof MainActivity) {
                             ((MainActivity) getActivity()).setupNavigationByRole(rol);

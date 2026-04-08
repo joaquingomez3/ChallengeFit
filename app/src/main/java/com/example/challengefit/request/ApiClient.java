@@ -6,13 +6,16 @@ import android.content.SharedPreferences;
 import com.example.challengefit.modelos.Desafio;
 import com.example.challengefit.modelos.DesafioResponse;
 import com.example.challengefit.modelos.Ejercicio;
+import com.example.challengefit.modelos.Objetivo;
 import com.example.challengefit.modelos.Rutina;
+import com.example.challengefit.modelos.Solicitud;
 import com.example.challengefit.modelos.Usuario;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import java.util.List;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -23,6 +26,7 @@ import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
@@ -79,7 +83,15 @@ public class ApiClient {
         @POST("api/Usuario/login")
         Call<String> login (@Field("mail") String email, @Field("clave") String password);
 
-        // RUTINAS
+        @GET("api/Usuario/objetivos")
+        Call<List<Objetivo>> obtenerObjetivos();
+
+        @GET("api/Usuario/especialidades")
+        Call<List<Usuario.Especialidad>> obtenerEspecialidades();
+
+        @POST("api/Usuario/crear")
+        Call<ResponseBody> crearUsuario(@Body RegistroRequest request);
+
         @GET("api/Rutina")
         Call<List<Rutina>> obtenerRutinas(@Header("Authorization") String token);
 
@@ -92,11 +104,9 @@ public class ApiClient {
         @POST("api/Rutina")
         Call<Rutina> crearRutina(@Header("Authorization") String token, @Body Rutina rutina);
 
-        // ALUMNOS CON PROGRESO
         @GET("api/Usuario/alumnos/progreso")
         Call<List<Usuario>> obtenerAlumnosConProgreso(@Header("Authorization") String token);
 
-        // DESAFIOS
         @GET("api/Desafio")
         Call<List<Desafio>> obtenerDesafios(@Header("Authorization") String token);
 
@@ -106,16 +116,34 @@ public class ApiClient {
         @POST("api/Desafio")
         Call<DesafioResponse> crearDesafio(@Header("Authorization") String token, @Body Desafio desafio);
 
-        // SOLICITUDES
         @GET("api/Solicitud/buscar-entrenadores")
         Call<List<Usuario>> buscarEntrenadores(@Header("Authorization") String token, @Query("nombre") String nombre);
 
         @POST("api/Solicitud")
         Call<String> enviarSolicitud(@Header("Authorization") String token, @Body SolicitudRequest solicitud);
+
+        @GET("api/Solicitud/pendientes")
+        Call<List<Solicitud>> obtenerSolicitudesPendientes(@Header("Authorization") String token);
+
+        @PUT("api/Solicitud/{id}/aceptar")
+        Call<String> aceptarSolicitud(@Header("Authorization") String token, @Path("id") int id);
+
+        @PUT("api/Solicitud/{id}/rechazar")
+        Call<String> rechazarSolicitud(@Header("Authorization") String token, @Path("id") int id);
     }
 
     public static class SolicitudRequest {
         public int idEntrenador;
         public SolicitudRequest(int idEntrenador) { this.idEntrenador = idEntrenador; }
+    }
+
+    public static class RegistroRequest {
+        public String nombre;
+        public String email;
+        public String clave;
+        public String rol;
+        public String objetivo;
+        public List<Integer> especialidadIds;
+        public List<Integer> objetivoIds;
     }
 }

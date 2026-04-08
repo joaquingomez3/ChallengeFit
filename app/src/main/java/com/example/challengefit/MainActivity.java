@@ -38,7 +38,8 @@ public class MainActivity extends AppCompatActivity {
                 BottomNavigationView navView = binding.navView;
                 
                 navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
-                    if (destination.getId() == R.id.navigation_login) {
+                    // OCULTAR MENÚ EN LOGIN Y REGISTRO
+                    if (destination.getId() == R.id.navigation_login || destination.getId() == R.id.navigation_registro) {
                         navView.setVisibility(View.GONE);
                         if (getSupportActionBar() != null) getSupportActionBar().hide();
                     } else {
@@ -49,7 +50,6 @@ public class MainActivity extends AppCompatActivity {
                 
                 NavigationUI.setupWithNavController(binding.navView, navController);
 
-                // GESTIONAR CLIC EN EL MENÚ (Para el botón de Salir)
                 navView.setOnItemSelectedListener(item -> {
                     if (item.getItemId() == R.id.navigation_logout) {
                         confirmarCierreSesion();
@@ -58,7 +58,6 @@ public class MainActivity extends AppCompatActivity {
                     return NavigationUI.onNavDestinationSelected(item, navController);
                 });
 
-                // CHEQUEO DE SESIÓN AL INICIAR
                 String token = ApiClient.leerToken(this);
                 String rol = ApiClient.leerRol(this);
                 if (token != null && rol != null) {
@@ -105,7 +104,6 @@ public class MainActivity extends AppCompatActivity {
                         .build();
             }
 
-            // Reasignamos el listener del menú después de inflarlo
             navView.setOnItemSelectedListener(item -> {
                 if (item.getItemId() == R.id.navigation_logout) {
                     confirmarCierreSesion();
