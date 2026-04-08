@@ -1,5 +1,6 @@
 package com.example.challengefit.ui.notifications;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,8 +42,16 @@ public class RequestsAdapter extends RecyclerView.Adapter<RequestsAdapter.Reques
     @Override
     public void onBindViewHolder(@NonNull RequestViewHolder holder, int position) {
         Solicitud solicitud = requestList.get(position);
-        if (solicitud.getAlumno() != null) {
+        
+        // Log para ver qué llega de la API
+        Log.d("RequestsAdapter", "Solicitud ID: " + solicitud.getId() + " - Alumno: " + (solicitud.getAlumno() != null ? solicitud.getAlumno().getNombre() : "NULL"));
+
+        if (solicitud.getAlumno() != null && solicitud.getAlumno().getNombre() != null) {
             holder.tvName.setText(solicitud.getAlumno().getNombre());
+        } else if (solicitud.getNombreAlumno() != null) {
+            holder.tvName.setText(solicitud.getNombreAlumno());
+        } else {
+            holder.tvName.setText("Alumno #" + solicitud.getIdAlumno());
         }
         
         holder.btnAccept.setOnClickListener(v -> listener.onAccept(solicitud));

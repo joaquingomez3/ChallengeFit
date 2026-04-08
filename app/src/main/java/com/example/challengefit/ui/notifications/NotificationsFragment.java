@@ -1,6 +1,7 @@
 package com.example.challengefit.ui.notifications;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,8 +41,10 @@ public class NotificationsFragment extends Fragment {
         mViewModel = new ViewModelProvider(this).get(NotificationsViewModel.class);
 
         String rol = ApiClient.leerRol(requireContext());
+        Log.d("NotificationsFragment", "Rol detectado: " + rol);
 
-        if ("ENTRENADOR".equals(rol) || "2".equals(rol)) {
+        // USAMOS equalsIgnoreCase PARA EVITAR ERRORES DE MAYÚSCULAS/MINÚSCULAS
+        if ("ENTRENADOR".equalsIgnoreCase(rol) || "2".equals(rol)) {
             configurarVistaEntrenador();
         } else {
             configurarVistaAlumno();
@@ -66,6 +69,7 @@ public class NotificationsFragment extends Fragment {
 
         mViewModel.getSolicitudes().observe(getViewLifecycleOwner(), solicitudes -> {
             if (solicitudes != null) {
+                Log.d("NotificationsFragment", "Solicitudes recibidas: " + solicitudes.size());
                 requestsAdapter.setRequests(solicitudes);
                 actualizarEmptyState(solicitudes.isEmpty());
             }
@@ -75,7 +79,7 @@ public class NotificationsFragment extends Fragment {
     }
 
     private void configurarVistaAlumno() {
-        // Por ahora los alumnos ven las notificaciones de prueba que creamos antes
+        // Notificaciones de prueba para el alumno
         List<Notificacion> list = new ArrayList<>();
         list.add(new Notificacion("Nueva Rutina", "Tu entrenador ha asignado 'Piernas Pro'.", "Hace 5m"));
         list.add(new Notificacion("Desafío Completado", "¡Felicidades! Completaste el reto de 30 días.", "Hace 1h"));
@@ -86,9 +90,12 @@ public class NotificationsFragment extends Fragment {
     }
 
     private void actualizarEmptyState(boolean isEmpty) {
-        View emptyText = getView().findViewById(R.id.tvEmptyNotif);
-        if (emptyText != null) {
-            emptyText.setVisibility(isEmpty ? View.VISIBLE : View.GONE);
+        View root = getView();
+        if (root != null) {
+            View emptyText = root.findViewById(R.id.tvEmptyNotif);
+            if (emptyText != null) {
+                emptyText.setVisibility(isEmpty ? View.VISIBLE : View.GONE);
+            }
         }
     }
 }

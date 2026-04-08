@@ -38,7 +38,6 @@ public class MainActivity extends AppCompatActivity {
                 BottomNavigationView navView = binding.navView;
                 
                 navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
-                    // OCULTAR MENÚ EN LOGIN Y REGISTRO
                     if (destination.getId() == R.id.navigation_login || destination.getId() == R.id.navigation_registro) {
                         navView.setVisibility(View.GONE);
                         if (getSupportActionBar() != null) getSupportActionBar().hide();
@@ -90,17 +89,18 @@ public class MainActivity extends AppCompatActivity {
             int targetDestination;
             AppBarConfiguration appBarConfiguration;
 
-            if ("2".equals(userType) || "Entrenador".equals(userType)) {
+            // Comparación insensible a mayúsculas
+            if ("2".equals(userType) || "ENTRENADOR".equalsIgnoreCase(userType)) {
                 navView.inflateMenu(R.menu.menu_trainer);
                 targetDestination = R.id.navigation_routines_trainer;
                 appBarConfiguration = new AppBarConfiguration.Builder(
-                        R.id.navigation_routines_trainer, R.id.navigation_students_trainer, R.id.navigation_challenges_trainer)
+                        R.id.navigation_routines_trainer, R.id.navigation_students_trainer, R.id.navigation_challenges_trainer, R.id.navigation_notifications)
                         .build();
             } else {
                 navView.inflateMenu(R.menu.menu_student);
                 targetDestination = R.id.navigation_home_student;
                 appBarConfiguration = new AppBarConfiguration.Builder(
-                        R.id.navigation_home_student, R.id.navigation_challenges_student, R.id.navigation_progress_student)
+                        R.id.navigation_home_student, R.id.navigation_challenges_student, R.id.navigation_progress_student, R.id.navigation_notifications)
                         .build();
             }
 

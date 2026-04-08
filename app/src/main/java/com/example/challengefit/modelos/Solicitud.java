@@ -5,8 +5,9 @@ public class Solicitud {
     private int idAlumno;
     private Usuario alumno;
     private int idEntrenador;
-    private String estado; // "Pendiente", "Aceptada", "Rechazada"
+    private String estado;
     private String fechaCreacion;
+    private String nombreAlumno; // AÑADIDO POR SI LLEGA PLANO
 
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
@@ -20,4 +21,6 @@ public class Solicitud {
     public void setEstado(String estado) { this.estado = estado; }
     public String getFechaCreacion() { return fechaCreacion; }
     public void setFechaCreacion(String fechaCreacion) { this.fechaCreacion = fechaCreacion; }
+    public String getNombreAlumno() { return nombreAlumno; }
+    public void setNombreAlumno(String nombreAlumno) { this.nombreAlumno = nombreAlumno; }
 }
