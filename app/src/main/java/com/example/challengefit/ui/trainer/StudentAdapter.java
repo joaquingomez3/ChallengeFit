@@ -3,20 +3,27 @@ package com.example.challengefit.ui.trainer;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.challengefit.R;
 import com.example.challengefit.modelos.Usuario;
+import com.google.android.material.button.MaterialButton;
 import java.util.List;
 
 public class StudentAdapter extends RecyclerView.Adapter<StudentAdapter.StudentViewHolder> {
 
     private List<Usuario> studentList;
+    private OnStudentActionListener listener;
 
-    public StudentAdapter(List<Usuario> studentList) {
+    public interface OnStudentActionListener {
+        void onAsignarRutina(Usuario student);
+        void onAsignarDesafio(Usuario student);
+    }
+
+    public StudentAdapter(List<Usuario> studentList, OnStudentActionListener listener) {
         this.studentList = studentList;
+        this.listener = listener;
     }
 
     public void setAlumnos(List<Usuario> alumnos) {
@@ -36,10 +43,8 @@ public class StudentAdapter extends RecyclerView.Adapter<StudentAdapter.StudentV
         Usuario student = studentList.get(position);
         holder.tvName.setText(student.getNombre());
         
-        // Usamos el progreso real que viene de la API
-        int progressValue = student.getProgreso();
-        holder.pbProgress.setProgress(progressValue);
-        holder.tvPercent.setText(progressValue + "%");
+        holder.btnRutina.setOnClickListener(v -> listener.onAsignarRutina(student));
+        holder.btnDesafio.setOnClickListener(v -> listener.onAsignarDesafio(student));
     }
 
     @Override
@@ -48,14 +53,14 @@ public class StudentAdapter extends RecyclerView.Adapter<StudentAdapter.StudentV
     }
 
     public static class StudentViewHolder extends RecyclerView.ViewHolder {
-        TextView tvName, tvPercent;
-        ProgressBar pbProgress;
+        TextView tvName;
+        MaterialButton btnRutina, btnDesafio;
 
         public StudentViewHolder(@NonNull View itemView) {
             super(itemView);
             tvName = itemView.findViewById(R.id.tvStudentName);
-            tvPercent = itemView.findViewById(R.id.tvProgressPercent);
-            pbProgress = itemView.findViewById(R.id.pbStudentProgress);
+            btnRutina = itemView.findViewById(R.id.btnAsignarRutina);
+            btnDesafio = itemView.findViewById(R.id.btnAsignarDesafio);
         }
     }
 }

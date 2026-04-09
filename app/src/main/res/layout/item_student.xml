@@ -19,7 +19,6 @@
             android:layout_height="48dp"
             android:scaleType="centerCrop"
             android:src="@drawable/ic_perfil"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:shapeAppearanceOverlay="@style/CircleImage"
@@ -28,39 +27,53 @@
 
         <TextView
             android:id="@+id/tvStudentName"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:text="Nombre Alumno"
             android:textColor="@color/white"
             android:textSize="16sp"
             android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/ivStudentPhoto"
             app:layout_constraintTop_toTopOf="@id/ivStudentPhoto" />
 
-        <ProgressBar
-            android:id="@+id/pbStudentProgress"
-            style="?android:attr/progressBarStyleHorizontal"
+        <LinearLayout
             android:layout_width="0dp"
-            android:layout_height="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
-            android:progress="70"
-            android:progressTint="@color/accent_green"
-            app:layout_constraintEnd_toStartOf="@id/tvProgressPercent"
-            app:layout_constraintStart_toStartOf="@id/tvStudentName"
-            app:layout_constraintTop_toBottomOf="@id/tvStudentName" />
-
-        <TextView
-            android:id="@+id/tvProgressPercent"
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="70%"
-            android:textColor="@color/text_secondary"
-            android:textSize="12sp"
-            app:layout_constraintBottom_toBottomOf="@id/pbStudentProgress"
+            android:layout_marginTop="12dp"
+            android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/pbStudentProgress" />
+            app:layout_constraintStart_toStartOf="@id/tvStudentName"
+            app:layout_constraintTop_toBottomOf="@id/tvStudentName">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnAsignarRutina"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginEnd="4dp"
+                android:text="Rutina"
+                android:textColor="@color/accent_green"
+                android:textSize="12sp"
+                app:cornerRadius="8dp"
+                app:strokeColor="@color/accent_green" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnAsignarDesafio"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="4dp"
+                android:text="Desafío"
+                android:textColor="@color/accent_green"
+                android:textSize="12sp"
+                app:cornerRadius="8dp"
+                app:strokeColor="@color/accent_green" />
+
+        </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </com.google.android.material.card.MaterialCardView>

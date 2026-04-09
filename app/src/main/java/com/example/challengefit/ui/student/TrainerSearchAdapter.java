@@ -1,5 +1,6 @@
 package com.example.challengefit.ui.student;
 
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,7 +48,6 @@ public class TrainerSearchAdapter extends RecyclerView.Adapter<TrainerSearchAdap
         // Limpiamos los chips anteriores para evitar duplicados al reciclar vistas
         holder.cgSpecialties.removeAllViews();
         
-        // Dibujamos las especialidades como Chips
         if (trainer.getEspecialidades() != null) {
             for (Usuario.Especialidad esp : trainer.getEspecialidades()) {
                 Chip chip = new Chip(holder.itemView.getContext());
@@ -61,7 +61,19 @@ public class TrainerSearchAdapter extends RecyclerView.Adapter<TrainerSearchAdap
             }
         }
 
-        holder.btnSend.setOnClickListener(v -> listener.onSendRequest(trainer));
+        // RESETEAR EL BOTÓN (por si se recicla la vista)
+        holder.btnSend.setText("Enviar Solicitud");
+        holder.btnSend.setEnabled(true);
+        holder.btnSend.setBackgroundColor(holder.itemView.getContext().getResources().getColor(R.color.accent_green));
+
+        holder.btnSend.setOnClickListener(v -> {
+            // CAMBIO VISUAL INMEDIATO
+            holder.btnSend.setText("PENDIENTE");
+            holder.btnSend.setEnabled(false);
+            holder.btnSend.setBackgroundColor(Color.parseColor("#333333")); // Gris oscuro
+            
+            listener.onSendRequest(trainer);
+        });
     }
 
     @Override

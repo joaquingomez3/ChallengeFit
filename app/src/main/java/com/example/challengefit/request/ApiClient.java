@@ -83,6 +83,7 @@ public class ApiClient {
         @POST("api/Usuario/login")
         Call<String> login (@Field("mail") String email, @Field("clave") String password);
 
+        // REGISTRO
         @GET("api/Usuario/objetivos")
         Call<List<Objetivo>> obtenerObjetivos();
 
@@ -92,6 +93,7 @@ public class ApiClient {
         @POST("api/Usuario/crear")
         Call<ResponseBody> crearUsuario(@Body RegistroRequest request);
 
+        // RUTINAS
         @GET("api/Rutina")
         Call<List<Rutina>> obtenerRutinas(@Header("Authorization") String token);
 
@@ -104,9 +106,14 @@ public class ApiClient {
         @POST("api/Rutina")
         Call<Rutina> crearRutina(@Header("Authorization") String token, @Body Rutina rutina);
 
+        @POST("api/Rutina/asignar")
+        Call<ResponseBody> asignarRutina(@Header("Authorization") String token, @Body AsignarRutinaRequest request);
+
+        // ALUMNOS CON PROGRESO
         @GET("api/Usuario/alumnos/progreso")
         Call<List<Usuario>> obtenerAlumnosConProgreso(@Header("Authorization") String token);
 
+        // DESAFIOS
         @GET("api/Desafio")
         Call<List<Desafio>> obtenerDesafios(@Header("Authorization") String token);
 
@@ -116,6 +123,10 @@ public class ApiClient {
         @POST("api/Desafio")
         Call<DesafioResponse> crearDesafio(@Header("Authorization") String token, @Body Desafio desafio);
 
+        @POST("api/Desafio/asignar")
+        Call<ResponseBody> asignarDesafio(@Header("Authorization") String token, @Body AsignarDesafioRequest request);
+
+        // SOLICITUDES
         @GET("api/Solicitud/buscar-entrenadores")
         Call<List<Usuario>> buscarEntrenadores(@Header("Authorization") String token, @Query("nombre") String nombre);
 
@@ -145,5 +156,23 @@ public class ApiClient {
         public String objetivo;
         public List<Integer> especialidadIds;
         public List<Integer> objetivoIds;
+    }
+
+    public static class AsignarRutinaRequest {
+        public int idAlumno;
+        public int idRutina;
+        public AsignarRutinaRequest(int idAlumno, int idRutina) {
+            this.idAlumno = idAlumno;
+            this.idRutina = idRutina;
+        }
+    }
+
+    public static class AsignarDesafioRequest {
+        public int idAlumno;
+        public int idDesafio;
+        public AsignarDesafioRequest(int idAlumno, int idDesafio) {
+            this.idAlumno = idAlumno;
+            this.idDesafio = idDesafio;
+        }
     }
 }
