@@ -1,12 +1,16 @@
 package com.example.challengefit.ui.trainer;
 
+import android.app.AlertDialog;
 import android.os.Bundle;
-import android.util.Log;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -15,11 +19,15 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.challengefit.R;
+import com.example.challengefit.modelos.Ejercicio;
 import com.example.challengefit.modelos.Rutina;
+import com.example.challengefit.modelos.RutinaEjercicio;
 import com.example.challengefit.request.ApiClient;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -29,6 +37,10 @@ public class DetalleRutinaFragment extends Fragment {
     private TextView tvNombre, tvNivel, tvDuracion, tvDescripcion;
     private RecyclerView rvEjercicios;
     private ExerciseAdapter adapter;
+    private ImageView btnAddExercise;
+    private int rutinaId;
+    private boolean esSeguimiento = false;
+    private List<RutinaEjercicio> listaActual = new ArrayList<>();
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -40,12 +52,16 @@ public class DetalleRutinaFragment extends Fragment {
         tvDuracion = root.findViewById(R.id.tvDetalleDuracion);
         tvDescripcion = root.findViewById(R.id.tvDetalleDescripcion);
         rvEjercicios = root.findViewById(R.id.rvEjerciciosRutina);
+        btnAddExercise = root.findViewById(R.id.btnAddExercise);
+        
         rvEjercicios.setLayoutManager(new LinearLayoutManager(getContext()));
 
         ImageView btnBack = root.findViewById(R.id.btnBackDetalle);
         if (btnBack != null) {
             btnBack.setOnClickListener(v -> Navigation.findNavController(v).popBackStack());
         }
+
+        btnAddExercise.setOnClickListener(v -> mostrarDialogoBusqueda());
 
         return root;
     }
@@ -55,8 +71,14 @@ public class DetalleRutinaFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         if (getArguments() != null) {
-            int id = getArguments().getInt("rutinaId");
-            cargarDatosRutina(id);
+            rutinaId = getArguments().getInt("rutinaId");
+            esSeguimiento = getArguments().getBoolean("esSeguimiento", false);
+            
+            if (!esSeguimiento) {
+                btnAddExercise.setVisibility(View.VISIBLE);
+            }
+            
+            cargarDatosRutina(rutinaId);
         }
     }
 
@@ -64,18 +86,12 @@ public class DetalleRutinaFragment extends Fragment {
         String token = ApiClient.leerToken(requireContext());
         ApiClient.ChallengeFitService api = ApiClient.getChallengeFitService();
         
-        Log.d("DetalleRutina", "Buscando rutina ID: " + id);
-
-        // Usamos obtenerRutinas() porque sabemos que este endpoint funciona y trae los ejercicios
         api.obtenerRutinas(token).enqueue(new Callback<List<Rutina>>() {
             @Override
             public void onResponse(Call<List<Rutina>> call, Response<List<Rutina>> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    List<Rutina> lista = response.body();
                     Rutina encontrada = null;
-                    
-                    // Filtramos la rutina por ID manualmente
-                    for (Rutina r : lista) {
+                    for (Rutina r : response.body()) {
                         if (r.getId() == id) {
                             encontrada = r;
                             break;
@@ -83,19 +99,22 @@ public class DetalleRutinaFragment extends Fragment {
                     }
 
                     if (encontrada != null) {
+                        if (!esSeguimiento && encontrada.getRutinaEjercicios() != null) {
+                            for (RutinaEjercicio re : encontrada.getRutinaEjercicios()) {
+                                re.setCompletado(false);
+                            }
+                        }
+                        
+                        listaActual.clear();
+                        if (encontrada.getRutinaEjercicios() != null) {
+                            listaActual.addAll(encontrada.getRutinaEjercicios());
+                        }
                         actualizarUI(encontrada);
-                    } else {
-                        Log.e("DetalleRutina", "No se encontró la rutina con ID: " + id);
                     }
-                } else {
-                    Log.e("DetalleRutina", "Error en la respuesta: " + response.code());
                 }
             }
-
             @Override
-            public void onFailure(Call<List<Rutina>> call, Throwable t) {
-                Log.e("DetalleRutina", "Fallo en la llamada: " + t.getMessage());
-            }
+            public void onFailure(Call<List<Rutina>> call, Throwable t) {}
         });
     }
 
@@ -105,12 +124,91 @@ public class DetalleRutinaFragment extends Fragment {
         tvDuracion.setText(r.getDuracion() + " min");
         tvDescripcion.setText(r.getDescripcion());
         
-        if (r.getRutinaEjercicios() != null && !r.getRutinaEjercicios().isEmpty()) {
-            Log.d("DetalleRutina", "Ejercicios cargados: " + r.getRutinaEjercicios().size());
-            adapter = new ExerciseAdapter(r.getRutinaEjercicios());
+        if (adapter == null) {
+            adapter = new ExerciseAdapter(listaActual, false, !esSeguimiento);
             rvEjercicios.setAdapter(adapter);
         } else {
-            Log.e("DetalleRutina", "La rutina no tiene ejercicios asignados.");
+            adapter.notifyDataSetChanged();
         }
+    }
+
+    private void mostrarDialogoBusqueda() {
+        View view = LayoutInflater.from(getContext()).inflate(R.layout.dialog_search_exercise, null);
+        EditText etSearch = view.findViewById(R.id.etSearchExerciseDialog);
+        RecyclerView rvResults = view.findViewById(R.id.rvSearchExerciseResultsDialog);
+        rvResults.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        AlertDialog dialog = new AlertDialog.Builder(getContext(), R.style.CustomAlertDialog)
+                .setTitle("Agregar Ejercicio")
+                .setView(view)
+                .setNegativeButton("Cerrar", null)
+                .create();
+
+        SearchExerciseAdapter searchAdapter = new SearchExerciseAdapter(new ArrayList<>(), ejercicio -> {
+            dialog.dismiss();
+            mostrarDialogoParametros(ejercicio);
+        });
+        rvResults.setAdapter(searchAdapter);
+
+        etSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (s.length() > 2) buscarEjercicios(s.toString(), searchAdapter);
+            }
+            @Override
+            public void afterTextChanged(Editable s) {}
+        });
+
+        dialog.show();
+    }
+
+    private void buscarEjercicios(String texto, SearchExerciseAdapter searchAdapter) {
+        String token = ApiClient.leerToken(requireContext());
+        ApiClient.getChallengeFitService().buscarEjercicios(token, texto).enqueue(new Callback<List<Ejercicio>>() {
+            @Override
+            public void onResponse(Call<List<Ejercicio>> call, Response<List<Ejercicio>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    searchAdapter.setList(response.body());
+                }
+            }
+            @Override
+            public void onFailure(Call<List<Ejercicio>> call, Throwable t) {}
+        });
+    }
+
+    private void mostrarDialogoParametros(Ejercicio ejercicio) {
+        View view = LayoutInflater.from(getContext()).inflate(R.layout.dialog_add_exercise_params, null);
+        EditText etSeries = view.findViewById(R.id.etSeriesDialog);
+        EditText etReps = view.findViewById(R.id.etRepsDialog);
+
+        new AlertDialog.Builder(getContext(), R.style.CustomAlertDialog)
+                .setTitle("Configurar " + ejercicio.getNombre())
+                .setView(view)
+                .setPositiveButton("Agregar", (dialog, which) -> {
+                    int series = Integer.parseInt(etSeries.getText().toString());
+                    int reps = Integer.parseInt(etReps.getText().toString());
+                    agregarEjercicio(ejercicio, series, reps);
+                })
+                .setNegativeButton("Cancelar", null)
+                .show();
+    }
+
+    private void agregarEjercicio(Ejercicio ej, int series, int reps) {
+        String token = ApiClient.leerToken(requireContext());
+        ApiClient.AgregarEjercicioRequest request = new ApiClient.AgregarEjercicioRequest(ej.getId(), series, reps);
+
+        ApiClient.getChallengeFitService().agregarEjercicioARutina(token, rutinaId, request).enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if (response.isSuccessful()) {
+                    Toast.makeText(getContext(), "Ejercicio agregado", Toast.LENGTH_SHORT).show();
+                    cargarDatosRutina(rutinaId); // Recargamos para obtener el ID de la RutinaEjercicio
+                }
+            }
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {}
+        });
     }
 }

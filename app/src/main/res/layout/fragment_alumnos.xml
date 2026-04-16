@@ -5,14 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background_dark"
-    android:padding="16dp"
-    tools:context=".ui.trainer.AlumnosFragment">
+    android:paddingTop="32dp">
 
-    <!-- Header: Icono Grupo + Mis Alumnos + Lupa -->
     <ImageView
         android:id="@+id/ivIconoAlumnos"
         android:layout_width="28dp"
         android:layout_height="28dp"
+        android:layout_marginStart="16dp"
         android:src="@drawable/icon_students"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -31,26 +30,22 @@
         app:layout_constraintStart_toEndOf="@id/ivIconoAlumnos"
         app:layout_constraintTop_toTopOf="@id/ivIconoAlumnos" />
 
-<!--    <ImageView-->
-<!--        android:id="@+id/ivSearchAlumnos"-->
-<!--        android:layout_width="24dp"-->
-<!--        android:layout_height="24dp"-->
-<!--        android:src="@android:drawable/ic_menu_search"-->
-<!--        app:layout_constraintBottom_toBottomOf="@id/tvTituloAlumnos"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintTop_toTopOf="@id/tvTituloAlumnos"-->
-<!--        app:tint="#4D5D53" />-->
-
-    <!-- RecyclerView para los Alumnos -->
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvAlumnos"
-        android:layout_width="0dp"
+    <!-- SWIPE REFRESH PARA ACTUALIZAR PROGRESO -->
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipeAlumnos"
+        android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvTituloAlumnos"
-        tools:listitem="@layout/item_student" />
+        app:layout_constraintTop_toBottomOf="@id/tvTituloAlumnos">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvAlumnos"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingHorizontal="16dp"
+            tools:listitem="@layout/item_student" />
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

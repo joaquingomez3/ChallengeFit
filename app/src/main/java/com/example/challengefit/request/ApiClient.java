@@ -21,6 +21,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
@@ -109,9 +110,24 @@ public class ApiClient {
         @POST("api/Rutina/asignar")
         Call<ResponseBody> asignarRutina(@Header("Authorization") String token, @Body AsignarRutinaRequest request);
 
-        // ALUMNOS CON PROGRESO
+        @PUT("api/Rutina/ejercicio/{id}/completar")
+        Call<ResponseBody> completarEjercicio(@Header("Authorization") String token, @Path("id") int id);
+
+        @DELETE("api/Rutina/ejercicio/{id}")
+        Call<ResponseBody> eliminarEjercicio(@Header("Authorization") String token, @Path("id") int id);
+
+        @POST("api/Rutina/{idRutina}/ejercicio")
+        Call<ResponseBody> agregarEjercicioARutina(@Header("Authorization") String token, @Path("idRutina") int idRutina, @Body AgregarEjercicioRequest request);
+
+        @PUT("api/Rutina/ejercicio/{id}")
+        Call<ResponseBody> editarEjercicioEnRutina(@Header("Authorization") String token, @Path("id") int id, @Body EditarEjercicioRequest request);
+
+        // ALUMNOS
         @GET("api/Usuario/alumnos/progreso")
         Call<List<Usuario>> obtenerAlumnosConProgreso(@Header("Authorization") String token);
+
+        @GET("api/Progreso/alumno/{id}/rutinas")
+        Call<List<Rutina>> obtenerRutinasDeAlumnoPorEstado(@Header("Authorization") String token, @Path("id") int alumnoId, @Query("estado") String estado);
 
         // DESAFIOS
         @GET("api/Desafio")
@@ -173,6 +189,26 @@ public class ApiClient {
         public AsignarDesafioRequest(int idAlumno, int idDesafio) {
             this.idAlumno = idAlumno;
             this.idDesafio = idDesafio;
+        }
+    }
+
+    public static class AgregarEjercicioRequest {
+        public int idEjercicio;
+        public int series;
+        public int repeticiones;
+        public AgregarEjercicioRequest(int idEjercicio, int series, int repeticiones) {
+            this.idEjercicio = idEjercicio;
+            this.series = series;
+            this.repeticiones = repeticiones;
+        }
+    }
+
+    public static class EditarEjercicioRequest {
+        public int series;
+        public int repeticiones;
+        public EditarEjercicioRequest(int series, int repeticiones) {
+            this.series = series;
+            this.repeticiones = repeticiones;
         }
     }
 }

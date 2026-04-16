@@ -10,6 +10,8 @@ public class Rutina {
     private int duracion;
     private Integer idEntrenador;
     private List<RutinaEjercicio> rutinaEjercicios;
+    private int porcentaje; // AÑADIDO: Para mostrar el progreso en la lista del entrenador
+
     public Rutina() {}
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
@@ -25,5 +27,6 @@ public class Rutina {
     public void setIdEntrenador(Integer idEntrenador) { this.idEntrenador = idEntrenador; }
     public List<RutinaEjercicio> getRutinaEjercicios() { return rutinaEjercicios; }
     public void setRutinaEjercicios(List<RutinaEjercicio> rutinaEjercicios) { this.rutinaEjercicios = rutinaEjercicios; }
+    public int getPorcentaje() { return porcentaje; }
+    public void setPorcentaje(int porcentaje) { this.porcentaje = porcentaje; }
 }
-

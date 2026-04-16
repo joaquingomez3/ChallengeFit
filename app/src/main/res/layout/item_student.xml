@@ -22,30 +22,55 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:shapeAppearanceOverlay="@style/CircleImage"
-            app:strokeColor="#353534"
+            app:strokeColor="@color/accent_green"
             app:strokeWidth="1dp" />
 
         <TextView
             android:id="@+id/tvStudentName"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:text="Nombre Alumno"
             android:textColor="@color/white"
             android:textSize="16sp"
             android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/ivStudentPhoto"
             app:layout_constraintTop_toTopOf="@id/ivStudentPhoto" />
 
+        <!-- PROGRESO REESTABLECIDO -->
+        <ProgressBar
+            android:id="@+id/pbStudentProgress"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="0dp"
+            android:layout_height="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:progress="0"
+            android:progressTint="@color/accent_green"
+            app:layout_constraintEnd_toStartOf="@id/tvProgressPercent"
+            app:layout_constraintStart_toStartOf="@id/tvStudentName"
+            app:layout_constraintTop_toBottomOf="@id/tvStudentName" />
+
+        <TextView
+            android:id="@+id/tvProgressPercent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0%"
+            android:textColor="@color/text_secondary"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="@id/pbStudentProgress"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/pbStudentProgress" />
+
+        <!-- BOTONES DE ASIGNACIÓN -->
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="16dp"
             android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@id/tvStudentName"
-            app:layout_constraintTop_toBottomOf="@id/tvStudentName">
+            app:layout_constraintTop_toBottomOf="@id/pbStudentProgress">
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnAsignarRutina"
@@ -56,7 +81,7 @@
                 android:layout_marginEnd="4dp"
                 android:text="Rutina"
                 android:textColor="@color/accent_green"
-                android:textSize="12sp"
+                android:textSize="11sp"
                 app:cornerRadius="8dp"
                 app:strokeColor="@color/accent_green" />
 
@@ -69,7 +94,7 @@
                 android:layout_marginStart="4dp"
                 android:text="Desafío"
                 android:textColor="@color/accent_green"
-                android:textSize="12sp"
+                android:textSize="11sp"
                 app:cornerRadius="8dp"
                 app:strokeColor="@color/accent_green" />
 

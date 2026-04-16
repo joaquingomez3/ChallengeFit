@@ -29,7 +29,7 @@ public class RutinasAlumnoFragment extends Fragment {
         rvRutinas.setLayoutManager(new LinearLayoutManager(getContext()));
 
         // Reutilizamos el adaptador de rutinas que ya tiene la lógica de navegación al detalle
-        adapter = new RoutineAdapter(new ArrayList<>());
+        adapter = new RoutineAdapter(new ArrayList<>(), false);
         rvRutinas.setAdapter(adapter);
 
         return root;

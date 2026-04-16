@@ -61,13 +61,14 @@ public class LoginViewModel extends AndroidViewModel {
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-                    // LÓGICA TEMPORAL PARA PRUEBAS:
-                    // Si el email contiene "admin" o "profe", lo guardamos como ENTRENADOR
-
 
                     loginExitoso.postValue(true);
                 } else {
-                    mMensaje.postValue("Error en el servidor: " + response.code());
+                    if (response.code() == 400) {
+                        mMensaje.postValue("Datos Incorrectos");
+                    } else {
+                        mMensaje.postValue("Error en el servidor: " + response.code());
+                    }
                 }
             }
 

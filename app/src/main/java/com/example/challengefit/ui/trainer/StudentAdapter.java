@@ -1,10 +1,13 @@
 package com.example.challengefit.ui.trainer;
 
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.challengefit.R;
 import com.example.challengefit.modelos.Usuario;
@@ -43,6 +46,18 @@ public class StudentAdapter extends RecyclerView.Adapter<StudentAdapter.StudentV
         Usuario student = studentList.get(position);
         holder.tvName.setText(student.getNombre());
         
+        int progress = student.getProgreso();
+        holder.pbProgress.setProgress(progress);
+        holder.tvPercent.setText(progress + "%");
+        
+        // NAVEGACIÓN AL DETALLE (Al tocar la tarjeta)
+        holder.itemView.setOnClickListener(v -> {
+            Bundle bundle = new Bundle();
+            bundle.putInt("alumnoId", student.getId());
+            bundle.putString("alumnoNombre", student.getNombre());
+            Navigation.findNavController(v).navigate(R.id.navigation_detalle_alumno, bundle);
+        });
+
         holder.btnRutina.setOnClickListener(v -> listener.onAsignarRutina(student));
         holder.btnDesafio.setOnClickListener(v -> listener.onAsignarDesafio(student));
     }
@@ -53,12 +68,15 @@ public class StudentAdapter extends RecyclerView.Adapter<StudentAdapter.StudentV
     }
 
     public static class StudentViewHolder extends RecyclerView.ViewHolder {
-        TextView tvName;
+        TextView tvName, tvPercent;
+        ProgressBar pbProgress;
         MaterialButton btnRutina, btnDesafio;
 
         public StudentViewHolder(@NonNull View itemView) {
             super(itemView);
             tvName = itemView.findViewById(R.id.tvStudentName);
+            tvPercent = itemView.findViewById(R.id.tvProgressPercent);
+            pbProgress = itemView.findViewById(R.id.pbStudentProgress);
             btnRutina = itemView.findViewById(R.id.btnAsignarRutina);
             btnDesafio = itemView.findViewById(R.id.btnAsignarDesafio);
         }

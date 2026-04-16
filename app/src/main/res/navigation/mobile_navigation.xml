@@ -61,6 +61,15 @@
             app:argType="integer" />
     </fragment>
 
+    <fragment
+        android:id="@+id/navigation_detalle_alumno"
+        android:name="com.example.challengefit.ui.trainer.DetalleAlumnoFragment"
+        android:label="Progreso del Alumno">
+        <argument
+            android:name="alumnoId"
+            app:argType="integer" />
+    </fragment>
+
     <!-- DESTINOS PARA CREACIÓN -->
     <fragment
         android:id="@+id/navigation_new_routine"

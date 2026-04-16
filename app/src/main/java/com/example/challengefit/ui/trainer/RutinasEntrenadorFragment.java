@@ -28,7 +28,7 @@ public class RutinasEntrenadorFragment extends Fragment {
         rvRutinas = root.findViewById(R.id.rvRutinasEntrenador);
         rvRutinas.setLayoutManager(new LinearLayoutManager(getContext()));
         
-        adapter = new RoutineAdapter(new ArrayList<>());
+        adapter = new RoutineAdapter(new ArrayList<>(),true);
         rvRutinas.setAdapter(adapter);
 
         // CONFIGURACIÓN DEL BOTÓN NUEVA RUTINA

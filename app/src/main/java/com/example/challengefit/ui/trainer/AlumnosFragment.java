@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.example.challengefit.R;
 import com.example.challengefit.modelos.Desafio;
 import com.example.challengefit.modelos.Rutina;
@@ -24,6 +25,7 @@ public class AlumnosFragment extends Fragment {
     private AlumnosViewModel mViewModel;
     private RecyclerView rvAlumnos;
     private StudentAdapter adapter;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -32,8 +34,9 @@ public class AlumnosFragment extends Fragment {
 
         rvAlumnos = root.findViewById(R.id.rvAlumnos);
         rvAlumnos.setLayoutManager(new LinearLayoutManager(getContext()));
+        
+        swipeRefreshLayout = root.findViewById(R.id.swipeAlumnos);
 
-        // CORRECCIÓN: Inicializamos con la lista y el listener de acciones
         adapter = new StudentAdapter(new ArrayList<>(), new StudentAdapter.OnStudentActionListener() {
             @Override
             public void onAsignarRutina(Usuario student) {
@@ -47,6 +50,11 @@ public class AlumnosFragment extends Fragment {
         });
         rvAlumnos.setAdapter(adapter);
 
+        // CONFIGURAR REFRESH
+        if (swipeRefreshLayout != null) {
+            swipeRefreshLayout.setOnRefreshListener(() -> mViewModel.cargarAlumnos());
+        }
+
         return root;
     }
 
@@ -59,16 +67,16 @@ public class AlumnosFragment extends Fragment {
         mViewModel.getLista().observe(getViewLifecycleOwner(), alumnos -> {
             if (alumnos != null) {
                 adapter.setAlumnos(alumnos);
+                if (swipeRefreshLayout != null) swipeRefreshLayout.setRefreshing(false);
             }
         });
 
-        // Observar mensajes de éxito en asignación
         mViewModel.getMensajeExito().observe(getViewLifecycleOwner(), msg -> {
             if (msg != null) Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
         });
 
         mViewModel.cargarAlumnos();
-        mViewModel.cargarRutinasYDesafios(); // Precargamos las opciones para los diálogos
+        mViewModel.cargarRutinasYDesafios();
     }
 
     private void mostrarSelectorRutinas(Usuario student) {
