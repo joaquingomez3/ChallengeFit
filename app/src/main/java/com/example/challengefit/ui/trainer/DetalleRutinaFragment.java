@@ -40,6 +40,7 @@ public class DetalleRutinaFragment extends Fragment {
     private ImageView btnAddExercise;
     private int rutinaId;
     private boolean esSeguimiento = false;
+    private boolean esAlumno = false;
     private List<RutinaEjercicio> listaActual = new ArrayList<>();
 
     @Override
@@ -74,8 +75,15 @@ public class DetalleRutinaFragment extends Fragment {
             rutinaId = getArguments().getInt("rutinaId");
             esSeguimiento = getArguments().getBoolean("esSeguimiento", false);
             
-            if (!esSeguimiento) {
+            // Verificamos el rol del usuario para saber si es alumno
+            String rol = ApiClient.leerRol(requireContext());
+            esAlumno = "Alumno".equalsIgnoreCase(rol);
+
+            // Solo mostramos el botón de agregar si es entrenador y NO es modo seguimiento
+            if (!esAlumno && !esSeguimiento) {
                 btnAddExercise.setVisibility(View.VISIBLE);
+            } else {
+                btnAddExercise.setVisibility(View.GONE);
             }
             
             cargarDatosRutina(rutinaId);
@@ -99,7 +107,8 @@ public class DetalleRutinaFragment extends Fragment {
                     }
 
                     if (encontrada != null) {
-                        if (!esSeguimiento && encontrada.getRutinaEjercicios() != null) {
+                        // SI ES ENTRENADOR EN MODO GESTIÓN (no seguimiento), limpiamos visualmente los checks
+                        if (!esAlumno && !esSeguimiento && encontrada.getRutinaEjercicios() != null) {
                             for (RutinaEjercicio re : encontrada.getRutinaEjercicios()) {
                                 re.setCompletado(false);
                             }
@@ -125,7 +134,9 @@ public class DetalleRutinaFragment extends Fragment {
         tvDescripcion.setText(r.getDescripcion());
         
         if (adapter == null) {
-            adapter = new ExerciseAdapter(listaActual, false, !esSeguimiento);
+            // Pasamos esAlumno para que el ExerciseAdapter habilite los checks
+            // canManage solo es true si es Entrenador en modo gestión (!esAlumno && !esSeguimiento)
+            adapter = new ExerciseAdapter(listaActual, esAlumno, !esAlumno && !esSeguimiento);
             rvEjercicios.setAdapter(adapter);
         } else {
             adapter.notifyDataSetChanged();

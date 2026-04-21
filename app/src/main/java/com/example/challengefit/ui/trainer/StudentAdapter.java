@@ -1,6 +1,7 @@
 package com.example.challengefit.ui.trainer;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,6 +48,9 @@ public class StudentAdapter extends RecyclerView.Adapter<StudentAdapter.StudentV
         holder.tvName.setText(student.getNombre());
         
         int progress = student.getProgreso();
+        Log.d("StudentAdapter", "Alumno: " + student.getNombre() + " - Progreso: " + progress);
+        
+        // Aseguramos que el progreso se vea correctamente
         holder.pbProgress.setProgress(progress);
         holder.tvPercent.setText(progress + "%");
         
