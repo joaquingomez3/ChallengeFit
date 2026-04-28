@@ -75,16 +75,11 @@ public class DetalleRutinaFragment extends Fragment {
             rutinaId = getArguments().getInt("rutinaId");
             esSeguimiento = getArguments().getBoolean("esSeguimiento", false);
             
-            // Verificamos el rol del usuario para saber si es alumno
             String rol = ApiClient.leerRol(requireContext());
             esAlumno = "Alumno".equalsIgnoreCase(rol);
 
-            // Solo mostramos el botón de agregar si es entrenador y NO es modo seguimiento
-            if (!esAlumno && !esSeguimiento) {
-                btnAddExercise.setVisibility(View.VISIBLE);
-            } else {
-                btnAddExercise.setVisibility(View.GONE);
-            }
+            // Botón de agregar solo para Entrenador y si NO es seguimiento
+            btnAddExercise.setVisibility(!esAlumno && !esSeguimiento ? View.VISIBLE : View.GONE);
             
             cargarDatosRutina(rutinaId);
         }
@@ -107,15 +102,15 @@ public class DetalleRutinaFragment extends Fragment {
                     }
 
                     if (encontrada != null) {
-                        // SI ES ENTRENADOR EN MODO GESTIÓN (no seguimiento), limpiamos visualmente los checks
-                        if (!esAlumno && !esSeguimiento && encontrada.getRutinaEjercicios() != null) {
-                            for (RutinaEjercicio re : encontrada.getRutinaEjercicios()) {
-                                re.setCompletado(false);
-                            }
-                        }
-                        
                         listaActual.clear();
                         if (encontrada.getRutinaEjercicios() != null) {
+                            // SI ES ENTRENADOR EN MODO GESTIÓN, forzamos completado=false para visualización de plantilla
+                            // PERO SI ES ALUMNO, respetamos lo que venga de la base de datos
+                            if (!esAlumno && !esSeguimiento) {
+                                for (RutinaEjercicio re : encontrada.getRutinaEjercicios()) {
+                                    re.setCompletado(false);
+                                }
+                            }
                             listaActual.addAll(encontrada.getRutinaEjercicios());
                         }
                         actualizarUI(encontrada);
@@ -133,14 +128,9 @@ public class DetalleRutinaFragment extends Fragment {
         tvDuracion.setText(r.getDuracion() + " min");
         tvDescripcion.setText(r.getDescripcion());
         
-        if (adapter == null) {
-            // Pasamos esAlumno para que el ExerciseAdapter habilite los checks
-            // canManage solo es true si es Entrenador en modo gestión (!esAlumno && !esSeguimiento)
-            adapter = new ExerciseAdapter(listaActual, esAlumno, !esAlumno && !esSeguimiento);
-            rvEjercicios.setAdapter(adapter);
-        } else {
-            adapter.notifyDataSetChanged();
-        }
+        // REFRESCAMOS EL ADAPTADOR CON LOS FLAGS CORRECTOS
+        adapter = new ExerciseAdapter(listaActual, esAlumno, !esAlumno && !esSeguimiento);
+        rvEjercicios.setAdapter(adapter);
     }
 
     private void mostrarDialogoBusqueda() {
@@ -215,7 +205,7 @@ public class DetalleRutinaFragment extends Fragment {
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 if (response.isSuccessful()) {
                     Toast.makeText(getContext(), "Ejercicio agregado", Toast.LENGTH_SHORT).show();
-                    cargarDatosRutina(rutinaId); // Recargamos para obtener el ID de la RutinaEjercicio
+                    cargarDatosRutina(rutinaId);
                 }
             }
             @Override

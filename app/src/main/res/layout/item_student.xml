@@ -37,32 +37,52 @@
             app:layout_constraintStart_toEndOf="@id/ivStudentPhoto"
             app:layout_constraintTop_toTopOf="@id/ivStudentPhoto" />
 
-        <!-- PROGRESO REESTABLECIDO -->
+        <TextView
+            android:id="@+id/tvStudentObjective"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Objetivo: Ganar masa"
+            android:textColor="@color/text_hint"
+            android:textSize="13sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@id/tvStudentName"
+            app:layout_constraintTop_toBottomOf="@id/tvStudentName" />
+
+        <TextView
+            android:id="@+id/tvExerciseStats"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="0 de 0 ejercicios completados"
+            android:textColor="@color/text_secondary"
+            android:textSize="12sp"
+            app:layout_constraintStart_toStartOf="@id/tvStudentName"
+            app:layout_constraintTop_toBottomOf="@id/tvStudentObjective" />
+
         <ProgressBar
             android:id="@+id/pbStudentProgress"
             style="?android:attr/progressBarStyleHorizontal"
             android:layout_width="0dp"
-            android:layout_height="8dp"
+            android:layout_height="10dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
-            android:progress="0"
-            android:progressTint="@color/accent_green"
+            android:progressDrawable="@drawable/custom_progress_bar"
             app:layout_constraintEnd_toStartOf="@id/tvProgressPercent"
             app:layout_constraintStart_toStartOf="@id/tvStudentName"
-            app:layout_constraintTop_toBottomOf="@id/tvStudentName" />
+            app:layout_constraintTop_toBottomOf="@id/tvExerciseStats" />
 
         <TextView
             android:id="@+id/tvProgressPercent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="0%"
-            android:textColor="@color/text_secondary"
-            android:textSize="12sp"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@id/pbStudentProgress"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/pbStudentProgress" />
 
-        <!-- BOTONES DE ASIGNACIÓN -->
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -97,7 +117,6 @@
                 android:textSize="11sp"
                 app:cornerRadius="8dp"
                 app:strokeColor="@color/accent_green" />
-
         </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
