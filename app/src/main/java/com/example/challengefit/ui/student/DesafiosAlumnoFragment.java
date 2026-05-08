@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -29,6 +30,14 @@ public class DesafiosAlumnoFragment extends Fragment {
         rvDesafios.setLayoutManager(new LinearLayoutManager(getContext()));
 
         adapter = new ChallengeAdapter(new ArrayList<>());
+        // Configuramos el adapter para vista de alumno para que muestre el botón
+        adapter.setStudentView(true);
+        
+        adapter.setOnChallengeClickListener(desafio -> {
+            // Acción al hacer clic en completar
+            mViewModel.completarDesafio(desafio.getId());
+        });
+
         rvDesafios.setAdapter(adapter);
 
         return root;
@@ -43,6 +52,12 @@ public class DesafiosAlumnoFragment extends Fragment {
         mViewModel.getLista().observe(getViewLifecycleOwner(), desafios -> {
             if (desafios != null) {
                 adapter.setDesafios(desafios);
+            }
+        });
+
+        mViewModel.getMensaje().observe(getViewLifecycleOwner(), msj -> {
+            if (msj != null) {
+                Toast.makeText(getContext(), msj, Toast.LENGTH_SHORT).show();
             }
         });
 

@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 
 import com.example.challengefit.modelos.Desafio;
 import com.example.challengefit.modelos.DesafioResponse;
+import com.example.challengefit.modelos.DesafioUsuario;
 import com.example.challengefit.modelos.Ejercicio;
 import com.example.challengefit.modelos.Objetivo;
 import com.example.challengefit.modelos.Rutina;
@@ -15,6 +16,7 @@ import com.google.gson.GsonBuilder;
 
 import java.util.List;
 
+import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Retrofit;
@@ -134,13 +136,16 @@ public class ApiClient {
         Call<List<Desafio>> obtenerDesafios(@Header("Authorization") String token);
 
         @GET("api/Desafio/mis-desafios")
-        Call<List<Desafio>> obtenerMisDesafios(@Header("Authorization") String token);
+        Call<List<DesafioUsuario>> obtenerMisDesafios(@Header("Authorization") String token);
 
         @POST("api/Desafio")
         Call<DesafioResponse> crearDesafio(@Header("Authorization") String token, @Body Desafio desafio);
 
         @POST("api/Desafio/asignar")
         Call<ResponseBody> asignarDesafio(@Header("Authorization") String token, @Body AsignarDesafioRequest request);
+
+        @PUT("api/Desafio/progreso/{id}")
+        Call<ResponseBody> completarDesafio(@Header("Authorization") String token, @Path("id") int id, @Body RequestBody progreso);
 
         // SOLICITUDES
         @GET("api/Solicitud/buscar-entrenadores")

@@ -51,5 +51,22 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/text_challenge_title" />
 
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_complete_challenge"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Marcar como completado"
+            android:textColor="@color/accent_green"
+            android:textSize="12sp"
+            android:visibility="gone"
+            app:icon="@drawable/ic_progress"
+            app:iconPadding="8dp"
+            app:iconTint="@color/accent_green"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/text_challenge_description" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

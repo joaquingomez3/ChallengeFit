@@ -8,10 +8,7 @@
         android:id="@+id/navigation_challenges_student"
         android:icon="@drawable/ic_challenges"
         android:title="Desafíos" />
-    <item
-        android:id="@+id/navigation_notifications"
-        android:icon="@drawable/ic_notifications_black_24dp"
-        android:title="Notis" />
+
     <item
         android:id="@+id/navigation_progress_student"
         android:icon="@drawable/ic_progress"
