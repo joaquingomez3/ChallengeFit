@@ -35,8 +35,8 @@ import retrofit2.http.Query;
 
 public class ApiClient {
 
-    public static final String BASE_URL = "http://10.0.2.2:5289/";
-
+    //public static final String BASE_URL = "http://10.0.2.2:5289/";
+    public static final String BASE_URL = "http://192.168.1.101:5289/";
     public static ChallengeFitService getChallengeFitService(){
         Gson gson = new GsonBuilder()
                 .setLenient()
