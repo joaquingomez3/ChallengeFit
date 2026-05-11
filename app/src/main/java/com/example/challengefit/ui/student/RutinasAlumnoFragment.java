@@ -28,8 +28,9 @@ public class RutinasAlumnoFragment extends Fragment {
         rvRutinas = root.findViewById(R.id.rvRutinasAlumno);
         rvRutinas.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        // Reutilizamos el adaptador de rutinas que ya tiene la lógica de navegación al detalle
-        adapter = new RoutineAdapter(new ArrayList<>(), false);
+        // Para el alumno ocultamos la barra de progreso en su lista principal por pedido del usuario
+        // isTrainerMode = false (es alumno), showProgress = false
+        adapter = new RoutineAdapter(new ArrayList<>(), false, false);
         rvRutinas.setAdapter(adapter);
 
         return root;

@@ -17,9 +17,20 @@ public class RoutineAdapter extends RecyclerView.Adapter<RoutineAdapter.RoutineV
 
     private List<Rutina> routineList;
     private boolean isTrainerMode;
+    private boolean showProgress;
+
     public RoutineAdapter(List<Rutina> routineList, boolean isTrainerMode) {
         this.isTrainerMode = isTrainerMode;
         this.routineList = routineList;
+        // Por defecto, si es modo entrenador ocultamos progreso (viendo sus propias rutinas)
+        // Si es modo alumno, lo mostramos (comportamiento anterior)
+        this.showProgress = !isTrainerMode;
+    }
+
+    public RoutineAdapter(List<Rutina> routineList, boolean isTrainerMode, boolean showProgress) {
+        this.isTrainerMode = isTrainerMode;
+        this.routineList = routineList;
+        this.showProgress = showProgress;
     }
 
     public void setRutinas(List<Rutina> rutinas) {
@@ -42,24 +53,8 @@ public class RoutineAdapter extends RecyclerView.Adapter<RoutineAdapter.RoutineV
         int cantEjercicios = (rutina.getRutinaEjercicios() != null) ? rutina.getRutinaEjercicios().size() : 0;
         holder.tvExerciseCount.setText(cantEjercicios + " ejercicios");
 
-//        // MOSTRAR PORCENTAJE SI EXISTE (Para el modo seguimiento del entrenador)
-//        if (rutina.getPorcentaje() > 0 || holder.pbRoutine != null) {
-//            if (holder.pbRoutine != null) {
-//                holder.pbRoutine.setVisibility(View.VISIBLE);
-//                holder.pbRoutine.setProgress(rutina.getPorcentaje());
-//            }
-//            if (holder.tvPercent != null) {
-//                holder.tvPercent.setVisibility(View.VISIBLE);
-//                holder.tvPercent.setText(rutina.getPorcentaje() + "%");
-//            }
-//        }
-        // --- CORRECCIÓN DE VISIBILIDAD ---
-        // Si es modo entrenador, OCULTAMOS la barra de progreso siempre
-        if (isTrainerMode) {
-            if (holder.pbRoutine != null) holder.pbRoutine.setVisibility(View.GONE);
-            if (holder.tvPercent != null) holder.tvPercent.setVisibility(View.GONE);
-        } else {
-            // Si es alumno, mostramos el progreso
+        // --- MANEJO DE VISIBILIDAD DE PROGRESO ---
+        if (showProgress) {
             if (holder.pbRoutine != null) {
                 holder.pbRoutine.setVisibility(View.VISIBLE);
                 holder.pbRoutine.setProgress(rutina.getPorcentaje());
@@ -68,12 +63,14 @@ public class RoutineAdapter extends RecyclerView.Adapter<RoutineAdapter.RoutineV
                 holder.tvPercent.setVisibility(View.VISIBLE);
                 holder.tvPercent.setText(rutina.getPorcentaje() + "%");
             }
+        } else {
+            if (holder.pbRoutine != null) holder.pbRoutine.setVisibility(View.GONE);
+            if (holder.tvPercent != null) holder.tvPercent.setVisibility(View.GONE);
         }
 
         holder.itemView.setOnClickListener(v -> {
             Bundle bundle = new Bundle();
             bundle.putInt("rutinaId", rutina.getId());
-            // --- CORRECCIÓN DE NAVEGACIÓN ---
             // Si es entrenador, esSeguimiento debe ser FALSE para que abra la edición
             bundle.putBoolean("esSeguimiento", !isTrainerMode);
 
@@ -94,7 +91,6 @@ public class RoutineAdapter extends RecyclerView.Adapter<RoutineAdapter.RoutineV
             super(itemView);
             tvRoutineName = itemView.findViewById(R.id.text_routine_name);
             tvExerciseCount = itemView.findViewById(R.id.text_exercise_count);
-            // Intentamos buscar campos de progreso por si el layout los tiene
             pbRoutine = itemView.findViewById(R.id.pbRoutineItem);
             tvPercent = itemView.findViewById(R.id.tvRoutinePercent);
         }
