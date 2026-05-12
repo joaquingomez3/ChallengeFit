@@ -31,29 +31,24 @@
         app:layout_constraintStart_toEndOf="@id/ivIconoDesafios"
         app:layout_constraintTop_toTopOf="@id/ivIconoDesafios" />
 
-<!--    <ImageView-->
-<!--        android:id="@+id/ivSearchDesafios"-->
-<!--        android:layout_width="24dp"-->
-<!--        android:layout_height="24dp"-->
-<!--        android:src="@android:drawable/ic_menu_search"-->
-<!--        app:layout_constraintBottom_toBottomOf="@id/tvTituloDesafios"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintTop_toTopOf="@id/tvTituloDesafios"-->
-<!--        app:tint="#4D5D53" />-->
-
-    <!-- RecyclerView para los Desafíos -->
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvDesafiosEntrenador"
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipeDesafiosEntrenador"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="20dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/btnNuevoDesafio"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvTituloDesafios"
-        tools:listitem="@layout/item_challenge" />
+        app:layout_constraintTop_toBottomOf="@id/tvTituloDesafios">
 
-    <!-- Botón Nuevo Desafío -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvDesafiosEntrenador"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:listitem="@layout/item_challenge" />
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnNuevoDesafio"
         android:layout_width="wrap_content"

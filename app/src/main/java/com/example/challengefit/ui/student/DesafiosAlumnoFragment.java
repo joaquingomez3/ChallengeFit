@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.example.challengefit.R;
 import com.example.challengefit.ui.trainer.ChallengeAdapter;
 import java.util.ArrayList;
@@ -19,6 +20,7 @@ public class DesafiosAlumnoFragment extends Fragment {
 
     private DesafiosAlumnoViewModel mViewModel;
     private RecyclerView rvDesafios;
+    private SwipeRefreshLayout swipeRefreshLayout;
     private ChallengeAdapter adapter;
 
     @Override
@@ -29,12 +31,15 @@ public class DesafiosAlumnoFragment extends Fragment {
         rvDesafios = root.findViewById(R.id.rvDesafiosAlumno);
         rvDesafios.setLayoutManager(new LinearLayoutManager(getContext()));
 
+        swipeRefreshLayout = root.findViewById(R.id.swipeDesafiosAlumno);
+        if (swipeRefreshLayout != null) {
+            swipeRefreshLayout.setOnRefreshListener(() -> mViewModel.cargarDesafios());
+        }
+
         adapter = new ChallengeAdapter(new ArrayList<>());
-        // Configuramos el adapter para vista de alumno para que muestre el botón
         adapter.setStudentView(true);
-        
+
         adapter.setOnChallengeClickListener(desafio -> {
-            // Acción al hacer clic en completar
             mViewModel.completarDesafio(desafio.getId());
         });
 
@@ -46,12 +51,13 @@ public class DesafiosAlumnoFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        
+
         mViewModel = new ViewModelProvider(this).get(DesafiosAlumnoViewModel.class);
 
         mViewModel.getLista().observe(getViewLifecycleOwner(), desafios -> {
             if (desafios != null) {
                 adapter.setDesafios(desafios);
+                if (swipeRefreshLayout != null) swipeRefreshLayout.setRefreshing(false);
             }
         });
 

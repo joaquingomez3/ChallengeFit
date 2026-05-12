@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.example.challengefit.R;
 import com.example.challengefit.modelos.Desafio;
 import java.util.ArrayList;
@@ -19,6 +20,7 @@ public class DesafiosEntrenadorFragment extends Fragment {
 
     private DesafiosEntrenadorViewModel mViewModel;
     private RecyclerView rvDesafios;
+    private SwipeRefreshLayout swipeRefreshLayout;
     private ChallengeAdapter adapter;
 
     @Override
@@ -29,14 +31,17 @@ public class DesafiosEntrenadorFragment extends Fragment {
         rvDesafios = root.findViewById(R.id.rvDesafiosEntrenador);
         rvDesafios.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        // Inicializamos el adaptador con una lista vacía
+        swipeRefreshLayout = root.findViewById(R.id.swipeDesafiosEntrenador);
+        if (swipeRefreshLayout != null) {
+            swipeRefreshLayout.setOnRefreshListener(() -> mViewModel.cargarDesafios());
+        }
+
         adapter = new ChallengeAdapter(new ArrayList<>());
         rvDesafios.setAdapter(adapter);
 
-        // Configurar botón para nuevo desafío
         View btnNuevoDesafio = root.findViewById(R.id.btnNuevoDesafio);
         if (btnNuevoDesafio != null) {
-            btnNuevoDesafio.setOnClickListener(v -> 
+            btnNuevoDesafio.setOnClickListener(v ->
                 Navigation.findNavController(v).navigate(R.id.navigation_new_challenge));
         }
 
@@ -46,17 +51,16 @@ public class DesafiosEntrenadorFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        
+
         mViewModel = new ViewModelProvider(this).get(DesafiosEntrenadorViewModel.class);
 
-        // Observamos los cambios en la lista de desafíos
         mViewModel.getLista().observe(getViewLifecycleOwner(), desafios -> {
             if (desafios != null) {
                 adapter.setDesafios(desafios);
+                if (swipeRefreshLayout != null) swipeRefreshLayout.setRefreshing(false);
             }
         });
 
-        // Cargamos los datos reales desde la API
         mViewModel.cargarDesafios();
     }
 }

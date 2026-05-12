@@ -48,6 +48,7 @@ dependencies {
     implementation(libs.converter.gson)
     implementation(libs.converter.scalars)
     implementation(libs.java.jwt)
+    implementation(libs.swiperefreshlayout)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)

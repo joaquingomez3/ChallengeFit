@@ -9,76 +9,73 @@
     android:paddingTop="32dp"
     android:paddingBottom="16dp">
 
-    <androidx.core.widget.NestedScrollView
+    <!-- HEADER FIJO ARRIBA -->
+    <LinearLayout
+        android:id="@+id/headerRutinasAlumno"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fillViewport="true">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:orientation="vertical">
 
-            <!-- SALUDO Y HEADER CON MÁS AIRE -->
-            <LinearLayout
-                android:layout_width="match_parent"
+            <TextView
+                android:id="@+id/tvSaludoAlumno"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical">
-                
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-                    
-                    <TextView
-                        android:id="@+id/tvSaludoAlumno"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="¡Hola, Alumno! 👋"
-                        android:textColor="@color/white"
-                        android:textSize="24sp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="¿Listo para el entrenamiento de hoy?"
-                        android:textColor="@color/text_secondary"
-                        android:textSize="14sp" />
-                </LinearLayout>
-
-                <com.google.android.material.imageview.ShapeableImageView
-                    android:id="@+id/ivPerfilAlumno"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:src="@drawable/ic_perfil"
-                    app:shapeAppearanceOverlay="@style/CircleImage"
-                    app:strokeColor="@color/accent_green"
-                    app:strokeWidth="2dp" />
-            </LinearLayout>
-
-            <!-- TARJETAS DE ESTADÍSTICAS -->
+                android:text="¡Hola, Alumno! 👋"
+                android:textColor="@color/white"
+                android:textSize="24sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="32dp"
-                android:text="Mis Rutinas Asignadas"
-                android:textColor="@color/white"
-                android:textSize="18sp"
-                android:textStyle="bold" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvRutinasAlumno"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:nestedScrollingEnabled="false"
-                tools:listitem="@layout/item_routine" />
-
+                android:text="¿Listo para el entrenamiento de hoy?"
+                android:textColor="@color/text_secondary"
+                android:textSize="14sp" />
         </LinearLayout>
-    </androidx.core.widget.NestedScrollView>
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/ivPerfilAlumno"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/ic_perfil"
+            app:shapeAppearanceOverlay="@style/CircleImage"
+            app:strokeColor="@color/accent_green"
+            app:strokeWidth="2dp" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tvTituloRutinasAlumno"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="Mis Rutinas Asignadas"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@id/headerRutinasAlumno" />
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRutinasAlumno"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvTituloRutinasAlumno">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvRutinasAlumno"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:nestedScrollingEnabled="false"
+            tools:listitem="@layout/item_routine" />
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

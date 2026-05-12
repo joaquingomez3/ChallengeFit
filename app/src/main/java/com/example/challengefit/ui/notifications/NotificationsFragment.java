@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.example.challengefit.R;
 import com.example.challengefit.modelos.Notificacion;
 import com.example.challengefit.modelos.Solicitud;
@@ -22,6 +23,7 @@ import java.util.List;
 public class NotificationsFragment extends Fragment {
 
     private RecyclerView rvNotifications;
+    private SwipeRefreshLayout swipeRefreshLayout;
     private NotificationsViewModel mViewModel;
     private RequestsAdapter requestsAdapter;
     private NotificationAdapter generalAdapter;
@@ -32,6 +34,7 @@ public class NotificationsFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_notifications, container, false);
         rvNotifications = root.findViewById(R.id.rvNotifications);
         rvNotifications.setLayoutManager(new LinearLayoutManager(getContext()));
+        swipeRefreshLayout = root.findViewById(R.id.swipeNotifications);
         return root;
     }
 
@@ -43,7 +46,6 @@ public class NotificationsFragment extends Fragment {
         String rol = ApiClient.leerRol(requireContext());
         Log.d("NotificationsFragment", "Rol detectado: " + rol);
 
-        // USAMOS equalsIgnoreCase PARA EVITAR ERRORES DE MAYÚSCULAS/MINÚSCULAS
         if ("ENTRENADOR".equalsIgnoreCase(rol) || "2".equals(rol)) {
             configurarVistaEntrenador();
         } else {
@@ -52,6 +54,10 @@ public class NotificationsFragment extends Fragment {
     }
 
     private void configurarVistaEntrenador() {
+        if (swipeRefreshLayout != null) {
+            swipeRefreshLayout.setOnRefreshListener(() -> mViewModel.cargarSolicitudes());
+        }
+
         requestsAdapter = new RequestsAdapter(new ArrayList<>(), new RequestsAdapter.OnRequestActionListener() {
             @Override
             public void onAccept(Solicitud solicitud) {
@@ -72,6 +78,7 @@ public class NotificationsFragment extends Fragment {
                 Log.d("NotificationsFragment", "Solicitudes recibidas: " + solicitudes.size());
                 requestsAdapter.setRequests(solicitudes);
                 actualizarEmptyState(solicitudes.isEmpty());
+                if (swipeRefreshLayout != null) swipeRefreshLayout.setRefreshing(false);
             }
         });
 
@@ -79,11 +86,16 @@ public class NotificationsFragment extends Fragment {
     }
 
     private void configurarVistaAlumno() {
-        // Notificaciones de prueba para el alumno
+        if (swipeRefreshLayout != null) {
+            swipeRefreshLayout.setOnRefreshListener(() -> {
+                swipeRefreshLayout.setRefreshing(false);
+            });
+        }
+
         List<Notificacion> list = new ArrayList<>();
         list.add(new Notificacion("Nueva Rutina", "Tu entrenador ha asignado 'Piernas Pro'.", "Hace 5m"));
         list.add(new Notificacion("Desafío Completado", "¡Felicidades! Completaste el reto de 30 días.", "Hace 1h"));
-        
+
         generalAdapter = new NotificationAdapter(list);
         rvNotifications.setAdapter(generalAdapter);
         actualizarEmptyState(list.isEmpty());

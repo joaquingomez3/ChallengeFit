@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.example.challengefit.R;
 import java.util.ArrayList;
 
@@ -18,6 +19,7 @@ public class RutinasEntrenadorFragment extends Fragment {
 
     private RutinasEntrenadorViewModel mViewModel;
     private RecyclerView rvRutinas;
+    private SwipeRefreshLayout swipeRefreshLayout;
     private RoutineAdapter adapter;
 
     @Override
@@ -27,11 +29,15 @@ public class RutinasEntrenadorFragment extends Fragment {
 
         rvRutinas = root.findViewById(R.id.rvRutinasEntrenador);
         rvRutinas.setLayoutManager(new LinearLayoutManager(getContext()));
-        
-        adapter = new RoutineAdapter(new ArrayList<>(),true);
+
+        swipeRefreshLayout = root.findViewById(R.id.swipeRutinasEntrenador);
+        if (swipeRefreshLayout != null) {
+            swipeRefreshLayout.setOnRefreshListener(() -> mViewModel.cargarRutinas());
+        }
+
+        adapter = new RoutineAdapter(new ArrayList<>(), true);
         rvRutinas.setAdapter(adapter);
 
-        // CONFIGURACIÓN DEL BOTÓN NUEVA RUTINA
         View btnNuevaRutina = root.findViewById(R.id.btnNuevaRutina);
         if (btnNuevaRutina != null) {
             btnNuevaRutina.setOnClickListener(v ->
@@ -44,12 +50,13 @@ public class RutinasEntrenadorFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        
+
         mViewModel = new ViewModelProvider(this).get(RutinasEntrenadorViewModel.class);
 
         mViewModel.getLista().observe(getViewLifecycleOwner(), rutinas -> {
             if (rutinas != null) {
                 adapter.setRutinas(rutinas);
+                if (swipeRefreshLayout != null) swipeRefreshLayout.setRefreshing(false);
             }
         });
 
